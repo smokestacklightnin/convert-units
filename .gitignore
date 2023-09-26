@@ -33,3 +33,6 @@
 
 # Intermediate build results
 build/
+
+# Build output
+convert-units
