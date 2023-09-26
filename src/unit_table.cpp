@@ -1,8 +1,5 @@
 #include <stack>
 #include "unit_table.hpp"
-#include <iostream>
-#include <string>
-
 
 void unittable::unittable::add_unit(const std::string &from_id, const std::string &to_id, float factor) {
   std::hash<std::string> str_hash;
