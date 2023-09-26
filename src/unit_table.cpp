@@ -28,7 +28,7 @@ float unittable::unittable::get_unit_conversion(const std::string &from_id, cons
     m_visited[curr_unit] = std::pair<float, size_t>(this->m_table[prev_unit][curr_unit], prev_unit);
     prev_unit = curr_unit;
 
-    for (auto it = (this->m_table)[curr_unit].begin(); it != (this->m_table)[curr_unit].end(); it++) {
+    for (std::map<size_t, float>::iterator it = (this->m_table)[curr_unit].begin(); it != (this->m_table)[curr_unit].end(); it++) {
       if (m_visited.find(it->first) == m_visited.end()) {
         m_stack.push(it->first);
       }
@@ -40,7 +40,7 @@ float unittable::unittable::get_unit_conversion(const std::string &from_id, cons
     }
   }
 
-  if (output == 0) {
+  if (output == 0.) {
     prev_unit = m_visited[curr_unit].second;
     output = 1.0;
 
