@@ -10,7 +10,7 @@ class unittable {
   float get_unit_conversion(const std::string &from_id, const std::string &to_id);
   void add_unit(const std::string &from_id, const std::string &to_id, float factor);
  private:
-  std::unordered_map< std::string, std::map< std::string,  float >> m_table;
+  std::unordered_map<size_t, std::map<size_t, float>> m_table;
 };
 }
 #endif
