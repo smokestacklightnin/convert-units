@@ -23,7 +23,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 # The -MMD and -MP flags together generate Makefiles for us!
 # These files will have .d instead of .o as the output.
-CPPFLAGS := $(INC_FLAGS) -MMD -MP --std=c++2a -Wall #-stdlib=libc++
+CPPFLAGS := $(INC_FLAGS) -MMD -MP --std=c++2a -Wall  -O9 #-stdlib=libc++
 
 # The final build step.
 $(TARGET_EXEC): $(OBJS)
