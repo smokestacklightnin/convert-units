@@ -14,8 +14,6 @@ SRCS := $(shell find $(SRC_DIRS) -name '*.cpp')
 # As an example, ./your_dir/hello.cpp turns into ./build/./your_dir/hello.cpp.o
 OBJS := $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 
-
-
 # Every folder in ./src will need to be passed to GCC so that it can find header files
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 # Add a prefix to INC_DIRS. So moduleA would become -ImoduleA. GCC understands this -I flag
@@ -25,6 +23,9 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 # These files will have .d instead of .o as the output.
 CPPFLAGS := $(INC_FLAGS) -MMD -MP --std=c++2a -Wall  -O9 #-stdlib=libc++
 
+.PHONY: all clean
+
+all: $(TARGET_EXEC)
 # The final build step.
 $(TARGET_EXEC): $(OBJS)
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
@@ -34,8 +35,6 @@ $(BUILD_DIR)/%.o: %.cpp %.hpp
 	mkdir -p $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-
-.PHONY: clean
 clean:
 	rm -fr $(BUILD_DIR)
 	rm -f $(PROJ_DIR)$(TARGET_EXEC)
