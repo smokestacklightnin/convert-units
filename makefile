@@ -27,7 +27,6 @@ CPPFLAGS := $(INC_FLAGS) -MMD -MP --std=c++2a -Wall #-stdlib=libc++
 
 # The final build step.
 $(TARGET_EXEC): $(OBJS)
-	echo $(lastword $(PROJ_DIR))
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
 # Build step for C++ source
