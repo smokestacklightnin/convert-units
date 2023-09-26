@@ -21,7 +21,7 @@ float unittable::unittable::get_unit_conversion(const std::string &from_id, cons
   while (!m_stack.empty()) {
     curr_unit = m_stack.top();
     m_stack.pop();
-    m_visited.insert(std::pair<std::string, std::pair<float, std::string>>(curr_unit, std::pair<float, std::string>(this->m_table[prev_unit][curr_unit], prev_unit)));
+    m_visited[curr_unit] = std::pair<float, std::string>(this->m_table[prev_unit][curr_unit], prev_unit);
     prev_unit = curr_unit;
 
     for (auto it = (this->m_table)[curr_unit].begin(); it != (this->m_table)[curr_unit].end(); it++) {
@@ -31,7 +31,7 @@ float unittable::unittable::get_unit_conversion(const std::string &from_id, cons
     }
 
     if (curr_unit == to_id) {
-      output = 0; // success
+      output = 0.; // success
       break;
     }
   }
