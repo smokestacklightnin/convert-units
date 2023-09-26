@@ -1,9 +1,12 @@
 #include <stack>
 #include "unit_table.hpp"
 #include <iostream>
+#include <string>
 void unittable::unittable::add_unit(const std::string &from_id, const std::string &to_id, float factor) {
-  this->m_table[from_id][to_id] = factor;
-  this->m_table[to_id][from_id] = 1. / factor;
+  std::hash<std::string> str_hash;
+  size_t from_id_hash(str_hash(from_id)), to_id_hash(str_hash(to_id));
+  this->m_table[from_id_hash][to_id_hash] = factor;
+  this->m_table[to_id_hash][from_id_hash] = 1. / factor;
 }
 
 float unittable::unittable::get_converstion(const std::string &from_id, const std::string &to_id, const float &to_convert) {
@@ -11,17 +14,18 @@ float unittable::unittable::get_converstion(const std::string &from_id, const st
 }
 
 float unittable::unittable::get_unit_conversion(const std::string &from_id, const std::string &to_id) {
-  std::unordered_map <  std::string, std::pair< float,  std::string >> m_visited;   // value and parent
-  m_visited.clear();
-  std::stack<std::string> m_stack;
-  std::string prev_unit(from_id), curr_unit("");
-  m_stack.push(from_id);
+  std::hash<std::string> str_hash;
+  size_t to_hash(str_hash(to_id)), from_hash(str_hash(from_id));
+  std::unordered_map <size_t, std::pair<float, size_t >> m_visited;   // value and parent
+  std::stack<size_t> m_stack;
+  size_t prev_unit(from_hash), curr_unit(str_hash(""));
+  m_stack.push(from_hash);
   float output = -1.;
 
   while (!m_stack.empty()) {
     curr_unit = m_stack.top();
     m_stack.pop();
-    m_visited[curr_unit] = std::pair<float, std::string>(this->m_table[prev_unit][curr_unit], prev_unit);
+    m_visited[curr_unit] = std::pair<float, size_t>(this->m_table[prev_unit][curr_unit], prev_unit);
     prev_unit = curr_unit;
 
     for (auto it = (this->m_table)[curr_unit].begin(); it != (this->m_table)[curr_unit].end(); it++) {
@@ -30,7 +34,7 @@ float unittable::unittable::get_unit_conversion(const std::string &from_id, cons
       }
     }
 
-    if (curr_unit == to_id) {
+    if (curr_unit == to_hash) {
       output = 0.; // success
       break;
     }
@@ -40,7 +44,7 @@ float unittable::unittable::get_unit_conversion(const std::string &from_id, cons
     prev_unit = m_visited[curr_unit].second;
     output = 1.0;
 
-    while (curr_unit != from_id) {
+    while (curr_unit != from_hash) {
       output *=  this->m_table[prev_unit][curr_unit];
       curr_unit = prev_unit;
       prev_unit = m_visited[prev_unit].second;
